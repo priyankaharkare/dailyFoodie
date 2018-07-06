@@ -1,17 +1,15 @@
-class RecipesController < OpenReadController
+class RecipesController < ProtectedController
   before_action :set_recipe, only: [:show, :update, :destroy]
 
   # GET /recipes
   def index
-    @recipes = Recipe.all
+    @recipes = current_user.recipes
 
     render json: @recipes
   end
 
   # GET /recipes/1
   def show
-    @recipe = Recipe.find(params[:id])
-
     render json: @recipe
   end
 
@@ -48,6 +46,6 @@ class RecipesController < OpenReadController
 
     # Only allow a trusted parameter "white list" through.
     def recipe_params
-      params.require(:recipe).permit(:name, :steps, :link)
+      params.require(:recipe).permit(:name, :steps, :link, :user_id)
     end
 end
